@@ -55,21 +55,24 @@ Revocation must prevent future ingestion and should support deletion of derived 
 
 ## 📚 Knowledge categories
 
-The User Knowledge Graph may contain:
+The project now includes registry specifications for:
 
-- conversations and timelines
-- ideas and their evolution
-- projects
-- decisions
-- source material
-- code
-- locations
-- entities
-- experiments
-- research topics
-- relationships between ideas
-- evidence and citations
-- tasks and outcomes
+- UN / ISO / WIPO / IANA / ICANN / ITU / IEEE source layers
+- countries, jurisdictions and official-source registries
+- banks and banking regulators
+- currencies and exchange infrastructure
+- exchanges, regulators, main boards and securities identifiers
+- global payment rails
+- enterprises and corporate hierarchies, including the Top-100,000 coverage target
+- elements, materials and manufacturing
+- electronics brands and the EMBED device language
+- genomics, proteins, species, biodiversity and biobanks
+- CRISPR and adjacent life-science fields
+- products, prices and supply chains
+- GIS / physical-world observations
+- evidence, provenance and historical change
+
+See [`docs/PROJECT_DOCUMENT_STATUS_V0.3.md`](docs/PROJECT_DOCUMENT_STATUS_V0.3.md) for the canonical document/status index.
 
 Sensitive information should be minimized and never committed to a public repository without an explicit decision to publish it.
 
@@ -79,7 +82,7 @@ The world model connects:
 
 `coordinate → space → building → people → roads → commerce → product → price → production → supply chain → resources → lifecycle → recycling → history`
 
-See [`GLOBAL_WORLD_KNOWLEDGE.md`](GLOBAL_WORLD_KNOWLEDGE.md).
+See [`GLOBAL_WORLD_KNOWLEDGE.md`](GLOBAL_WORLD_KNOWLEDGE.md) and [`docs/GLOBAL_KNOWLEDGE_MASTER_PLAN_V0.2.md`](docs/GLOBAL_KNOWLEDGE_MASTER_PLAN_V0.2.md).
 
 ## 🪐 ORBIT Language
 
@@ -93,7 +96,16 @@ Swift / C / C++ / Rust / Python / JavaScript / SQL / ML systems / GIS
              AST → ORBIT-IR → backends
 ```
 
-See [`docs/ORBIT_LANGUAGE.md`](docs/ORBIT_LANGUAGE.md), [`docs/ORBIT_ARCHITECTURE_V0.2.md`](docs/ORBIT_ARCHITECTURE_V0.2.md), and [`docs/ORBIT_GRAMMAR_V0.1.md`](docs/ORBIT_GRAMMAR_V0.1.md).
+The executable prototype is under `orbit/`:
+
+- `orbit/lexer.py` — lexer prototype
+- `orbit/parser.py` — parser prototype
+- `orbit/ast.py` — normalized AST
+- `orbit/checker.py` — identifier/evidence checks
+
+The current parser grammar is [`docs/ORBIT_GRAMMAR_V0.2.md`](docs/ORBIT_GRAMMAR_V0.2.md). The older v0.1 grammar is retained as a historical draft.
+
+See [`docs/ORBIT_LANGUAGE_SPEC_V0.1.md`](docs/ORBIT_LANGUAGE_SPEC_V0.1.md) and [`docs/ORBIT_ARCHITECTURE_V0.2.md`](docs/ORBIT_ARCHITECTURE_V0.2.md).
 
 ## 🤖 Multi-model AI
 
@@ -135,7 +147,7 @@ See [`docs/ORBIT_INTEL_ACCELERATION.md`](docs/ORBIT_INTEL_ACCELERATION.md).
 
 ## 📜 Conversation archive
 
-The repository also contains a recovered thematic index of long-running ChatGPT discussions. It is **not a complete account export**.
+The repository contains a recovered thematic index of long-running ChatGPT discussions. It is **not a complete account export**.
 
 See [`docs/CONVERSATION_ARCHIVE_INDEX.md`](docs/CONVERSATION_ARCHIVE_INDEX.md) and [`docs/CHATGPT_ARCHIVE_PIPELINE.md`](docs/CHATGPT_ARCHIVE_PIPELINE.md).
 
@@ -165,19 +177,36 @@ AI agreement is not proof. Correlation is not automatically causation.
 ├── GLOBAL_WORLD_KNOWLEDGE.md
 ├── examples/
 ├── schemas/
-│   ├── observation.schema.json
-│   └── product.schema.json
 ├── docs/
-│   ├── ORBIT_LANGUAGE.md
+│   ├── PROJECT_DOCUMENT_STATUS_V0.3.md
+│   ├── GLOBAL_KNOWLEDGE_MASTER_PLAN_V0.2.md
+│   ├── GLOBAL_COMPLETION_AUDIT_V0.1.md
+│   ├── GLOBAL_DATABASE_UPDATE_V0.2.md
+│   ├── GLOBAL_COUNTRY_EXCHANGE_CURRENCY_REGISTRY_V0.1.md
+│   ├── GLOBAL_BANK_REGISTRY_V0.1.md
+│   ├── GLOBAL_EXCHANGE_REGULATOR_MAINBOARD_REGISTRY_V0.1.md
+│   ├── GLOBAL_PAYMENT_RAILS_REGISTRY_V0.1.md
+│   ├── GLOBAL_TOP_100000_ENTERPRISE_REGISTRY_V0.1.md
+│   ├── COUNTRY_LICENSE_REGISTRY_SCHEMA_V0.1.md
+│   ├── GLOBAL_BIOLOGICAL_KNOWLEDGE_REGISTRY_V0.1.md
+│   ├── BIOTECH_CRISPR_AND_LIFE_SCIENCE_REGISTRY_V0.1.md
+│   ├── ELECTRONICS_BRAND_REGISTRY_AND_EMBEDDED_LANGUAGE_V0.1.md
+│   ├── AI_OBSERVATION_PROTOCOL.md
+│   ├── ORBIT_LANGUAGE_SPEC_V0.1.md
 │   ├── ORBIT_ARCHITECTURE_V0.2.md
 │   ├── ORBIT_GRAMMAR_V0.1.md
+│   ├── ORBIT_GRAMMAR_V0.2.md
 │   ├── ORBIT_INTEL_ACCELERATION.md
 │   ├── SIRI_AND_MULTI_MODEL_BRIDGE.md
-│   ├── ORBIT_MODEL_LANGUAGE_TOKEN_ECONOMY.md
 │   ├── ORBIT_ROUTER_LEDGER_V0.1.md
-│   ├── AI_OBSERVATION_PROTOCOL.md
 │   ├── CONVERSATION_ARCHIVE_INDEX.md
 │   └── CHATGPT_ARCHIVE_PIPELINE.md
+├── orbit/
+│   ├── lexer.py
+│   ├── parser.py
+│   ├── ast.py
+│   ├── checker.py
+│   └── README.md
 └── tools/
     └── import_chatgpt_export.py
 ```
@@ -193,19 +222,24 @@ AI agreement is not proof. Correlation is not automatically causation.
 - [x] Intel optimization strategy
 - [x] Multi-model bridge concept
 - [x] Token/value ledger concept
-- [x] User Knowledge README / permission model
+- [x] User Knowledge permission model
+- [x] Global registry architecture
 
-### Phase 2 — Runtime
-- [ ] ORBIT lexer
-- [ ] ORBIT parser
-- [ ] AST
+### Phase 2 — Runtime prototype
+- [x] ORBIT lexer prototype
+- [x] ORBIT parser prototype
+- [x] Normalized AST prototype
+- [x] Basic identifier/evidence checker prototype
 - [ ] type and unit checker
-- [ ] evidence checker
+- [ ] entity resolver
+- [ ] full evidence/provenance checker
+- [ ] permission engine
 - [ ] ORBIT-IR
-- [ ] hardware capability probe
 - [ ] provider adapters
-- [ ] token/work meter
+- [ ] hardware capability probe
+- [ ] token/work meter implementation
 - [ ] ledger implementation
+- [ ] conformance test suite
 
 ### Phase 3 — World intelligence
 - [ ] image observation pipeline
@@ -215,14 +249,35 @@ AI agreement is not proof. Correlation is not automatically causation.
 - [ ] supply-chain graph
 - [ ] historical timeline
 - [ ] knowledge graph
+- [ ] data-gap engine
+- [ ] conflict-resolution engine
 
-### Phase 4 — User-authorized AI ecosystem
+### Phase 4 — Global ingestion
+- [ ] UN/ISO country master
+- [ ] official-source registry for all jurisdictions
+- [ ] central-bank / banking-regulator adapters
+- [ ] exchange/regulator/main-board adapters
+- [ ] payment-rail adapters
+- [ ] enterprise ranking/source adapters
+- [ ] materials/electronics sources
+- [ ] biological/scientific sources
+- [ ] per-country coverage reports
+
+### Phase 5 — User-authorized AI ecosystem
 - [ ] ChatGPT export ingestion
 - [ ] additional AI export adapters
 - [ ] Apple/Siri App Intents prototype
 - [ ] local knowledge index
 - [ ] consent dashboard
 - [ ] revocation and deletion workflow
+
+### Phase 6 — Public platform
+- [ ] dashboards
+- [ ] machine-readable APIs
+- [ ] source/provenance viewer
+- [ ] global data-gap map
+- [ ] security/legal audit
+- [ ] reproducible releases
 
 ## ⚖️ Principles
 
@@ -236,6 +291,7 @@ AI agreement is not proof. Correlation is not automatically causation.
 8. Separate workload accounting from money.
 9. Build experimentally and measure real performance.
 10. Make the system useful to people before making it powerful.
+11. **Never claim global completeness until the underlying records are actually verified.**
 
 ## License
 
