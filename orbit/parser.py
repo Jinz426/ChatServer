@@ -2,6 +2,15 @@
 from .lexer import lex
 from .ast import EntityNode, ObservationNode, Program
 
+# Temporary keyword set for the v0.2 prototype. A full grammar will replace
+# this heuristic with explicit field/value productions.
+FIELD_KEYS = {
+    "name", "iso2", "iso3", "iso_numeric", "legal_name", "jurisdiction",
+    "license_status", "parent", "subject", "predicate", "value", "period",
+    "source", "evidence", "observed_at", "published_at", "valid_from",
+    "valid_until", "status", "confidence"
+}
+
 class Parser:
     def __init__(self, source: str):
         self.tokens = list(lex(source))
@@ -43,7 +52,7 @@ class Parser:
                     values.append(self.value())
                     continue
                 if token.kind == "ID":
-                    if self.peek(1).kind in {"STRING", "NUMBER"}:
+                    if token.value in FIELD_KEYS:
                         break
                     values.append(self.value())
                     continue
