@@ -1,0 +1,12 @@
+world demo {
+    location Bangkok @ 13.7563, 100.5018
+
+    market example {
+        product water {
+            price 25 THB / 12 bottle
+            evidence "public_observation"
+        }
+    }
+
+    flow water reservoir -> market
+}
