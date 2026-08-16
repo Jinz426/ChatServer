@@ -1,65 +1,73 @@
 """ORBIT v0.1 reference parser prototype."""
-from dataclasses import dataclass
-from .lexer import lex, Token
-
-@dataclass
-class Entity:
-    type: str
-    id: str
-    fields: dict
-
-@dataclass
-class Observation:
-    id: str
-    fields: dict
+from .lexer import lex
+from .ast import EntityNode, ObservationNode, Program
 
 class Parser:
     def __init__(self, source: str):
         self.tokens = list(lex(source))
         self.i = 0
 
-    def peek(self):
-        return self.tokens[self.i]
+    def peek(self, offset=0):
+        index = min(self.i + offset, len(self.tokens) - 1)
+        return self.tokens[index]
 
     def pop(self):
-        t = self.tokens[self.i]; self.i += 1; return t
+        token = self.peek()
+        self.i += 1
+        return token
 
     def expect(self, kind, value=None):
-        t = self.pop()
-        if t.kind != kind or (value is not None and t.value != value):
-            raise SyntaxError(f"Expected {kind} {value or ''} at {t.position}")
-        return t
+        token = self.pop()
+        if token.kind != kind or (value is not None and token.value != value):
+            expected = f"{kind} {value}" if value is not None else kind
+            raise SyntaxError(f"Expected {expected} at {token.position}; got {token.kind} {token.value!r}")
+        return token
 
     def value(self):
-        t = self.pop()
-        if t.kind in {"STRING", "ID", "NUMBER"}:
-            return t.value.strip('"')
-        raise SyntaxError(f"Expected value at {t.position}")
+        token = self.pop()
+        if token.kind in {"STRING", "ID", "NUMBER"}:
+            return token.value.strip('"')
+        raise SyntaxError(f"Expected value at {token.position}")
 
     def block(self):
         self.expect("SYMBOL", "{")
         fields = {}
         while not (self.peek().kind == "SYMBOL" and self.peek().value == "}"):
+            if self.peek().kind == "EOF":
+                raise SyntaxError("Unterminated block")
             key = self.expect("ID").value
-            vals = []
-            while not (self.peek().kind == "ID" and self.tokens[self.i + 1].value == "{") and not (self.peek().kind == "SYMBOL" and self.peek().value == "}"):
-                vals.append(self.value())
-                if self.peek().kind == "EOF": break
-            fields[key] = vals[0] if len(vals) == 1 else vals
+            values = []
+            while len(values) < 4:
+                token = self.peek()
+                if token.kind in {"STRING", "NUMBER"}:
+                    values.append(self.value())
+                    continue
+                if token.kind == "ID":
+                    if self.peek(1).kind in {"STRING", "NUMBER"}:
+                        break
+                    values.append(self.value())
+                    continue
+                break
+            if not values:
+                raise SyntaxError(f"Field {key!r} requires a value at {self.peek().position}")
+            fields[key] = values[0] if len(values) == 1 else values
         self.expect("SYMBOL", "}")
         return fields
 
     def parse(self):
         nodes = []
         while self.peek().kind != "EOF":
-            kind = self.expect("ID").value
-            ident_type = self.expect("ID").value
-            ident = self.value()
+            declaration = self.expect("ID").value
+            entity_type = self.expect("ID").value
+            identifier = self.value()
             fields = self.block()
-            if kind == "entity": nodes.append(Entity(ident_type, ident, fields))
-            elif kind == "observation": nodes.append(Observation(ident, fields))
-            else: raise SyntaxError(f"Unsupported top-level form: {kind}")
-        return nodes
+            if declaration == "entity":
+                nodes.append(EntityNode(entity_type, identifier, fields))
+            elif declaration == "observation":
+                nodes.append(ObservationNode(identifier, fields))
+            else:
+                raise SyntaxError(f"Unsupported top-level declaration: {declaration}")
+        return Program(nodes)
 
 def parse(source: str):
     return Parser(source).parse()
