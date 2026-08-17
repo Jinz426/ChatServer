@@ -292,6 +292,14 @@ Time-to-Reference
 
 Individual-level capability profiles can become sensitive. Use consent, data minimization, lawful sources, aggregation and transparent methodology. Do not create covert personal scoring or use capability scores to make high-impact decisions without appropriate governance and review.
 
+## 18. Repository navigation and verification
+
+This specification is maintained in the repository under `docs/`. The canonical path is:
+
+`docs/ORBIT_CAPABILITY_GRAPH_AND_FUNCTIONAL_LEADERSHIP_V0.1.md`
+
+The project should use this repository path as the stable reference rather than relying on temporary or third-party links. If a client displays a 404, first verify the default branch (`main`), repository visibility, exact path spelling and GitHub cache before changing or duplicating the file.
+
 ## Status
 ARCHITECTURE / RESEARCH SPECIFICATION — v0.1
 
